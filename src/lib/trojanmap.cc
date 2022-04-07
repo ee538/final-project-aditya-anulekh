@@ -1,5 +1,11 @@
 #include "trojanmap.h"
 
+void convert_string_to_lower(std::string &str) {
+  for (auto &c : str) {
+    c = tolower(c);
+  }
+}
+
 //-----------------------------------------------------
 // TODO: Student should implement the following:
 //-----------------------------------------------------
@@ -63,6 +69,12 @@ std::string TrojanMap::GetID(const std::string& name) {
  */
 std::pair<double, double> TrojanMap::GetPosition(std::string name) {
   std::pair<double, double> results(-1, -1);
+  for (auto node : data) {
+    if (node.second.name == name) {
+      results.first = node.second.lat;
+      results.second = node.second.lon;
+    }
+  }
   return results;
 }
 
@@ -96,6 +108,18 @@ std::string TrojanMap::FindClosestName(std::string name) {
  */
 std::vector<std::string> TrojanMap::Autocomplete(std::string name){
   std::vector<std::string> results;
+  convert_string_to_lower(name);
+  for (auto node : data) {
+      // Size of input should be smaller than the name of the node
+      if (name.size() > node.second.name.size())
+          continue;
+      // Convert the name of the node to lower case
+      std::string tmp = node.second.name;
+      convert_string_to_lower(tmp);
+      // If the prefix of the input is the same as the prefix of the node, add the node to the results
+      if (tmp.find(name) == 0)
+          results.push_back(node.second.name);
+  }
   return results;
 }
 
