@@ -84,7 +84,23 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
  * 
  */
 int TrojanMap::CalculateEditDistance(std::string a, std::string b){
-    return 0;
+    std::vector <std::vector<int>> dp(a.size()+1, std::vector<int>(b.size()+1, 0));
+    for (int i = 0; i <= a.size(); i++) {
+        dp[i][0] = i;
+    }
+    for (int j = 0; j <= b.size(); j++) {
+        dp[0][j] = j;
+    }
+    for (int i = 1; i <= a.size(); i++) {
+        for (int j = 1; j <= b.size(); j++) {
+            if (a[i-1] == b[j-1]) {
+                dp[i][j] = dp[i-1][j-1];
+            } else {
+                dp[i][j] = 1 + std::min(dp[i-1][j-1], std::min(dp[i-1][j], dp[i][j-1]));
+            }
+        }
+    }
+    return dp[a.size()][b.size()];
 }
 
 /**
@@ -95,6 +111,14 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b){
  */
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = "";
+  int min_distance = INT_MAX;
+  for (auto node : data) {
+    int distance = CalculateEditDistance(name, node.second.name);
+    if (distance < min_distance) {
+      min_distance = distance;
+      tmp = node.second.name;
+    }
+  }
   return tmp;
 }
 
