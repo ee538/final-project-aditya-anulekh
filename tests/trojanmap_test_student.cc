@@ -1,6 +1,17 @@
 #include "gtest/gtest.h"
 #include "src/lib/trojanmap.h"
 
+
+TEST(TrojanMapStudentTest, GetLatLon) {
+  TrojanMap m;
+  std::vector<std::string> v = {"6816193772", "6813416126", "6813416125"};
+  EXPECT_EQ(34.0302951, m.GetLat("122659207"));
+  EXPECT_EQ(-118.2857237, m.GetLon("122659207"));
+  EXPECT_EQ(v, m.GetNeighborIDs("122659207"));
+  EXPECT_EQ("Crosswalk", m.GetName("122659207"));
+  EXPECT_EQ("122659207", m.GetID("Crosswalk"));
+}
+
 TEST(TrojanMapStudentTest, Autocomplete_Test1) {
   TrojanMap m;
   // Test the simple case
