@@ -171,6 +171,6 @@ TEST(TrojanMapStudentTest, FindClosestName_Test1) {
   EXPECT_EQ(m.FindClosestName("Byank of Amrica"), "Bank of America");
   EXPECT_EQ(m.FindClosestName("Soobvay"), "Subway");
   EXPECT_EQ(m.FindClosestName("MacDonals"), "McDonalds");
-  EXPECT_EQ(m.FindClosestName("Bava"), "Bevvy");
+  EXPECT_EQ(m.FindClosestName("Bava"), "CAVA");
   EXPECT_EQ(m.FindClosestName("Moneybird"), "Honeybird");
 }

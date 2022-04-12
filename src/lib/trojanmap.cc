@@ -137,9 +137,18 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b){
  */
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = "";
+  // Convert name to lower case
+  convert_string_to_lower(name);
   int min_distance = INT_MAX;
   for (auto node : data) {
-    int distance = CalculateEditDistance(name, node.second.name);
+    // Handle empty strings
+    if (node.second.name.size() == 0) {
+      continue;
+    }
+    // Convert name to lower case
+    std::string tmp_name = node.second.name;
+    convert_string_to_lower(tmp_name);
+    int distance = CalculateEditDistance(name, tmp_name);
     if (distance < min_distance) {
       min_distance = distance;
       tmp = node.second.name;
