@@ -1,4 +1,5 @@
 #include "trojanmap.h"
+#include <limits.h>
 
 void convert_string_to_lower(std::string &str) {
   for (auto &c : str) {
@@ -226,6 +227,91 @@ double TrojanMap::CalculatePathLength(const std::vector<std::string> &path) {
 std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::string location1_name, std::string location2_name) {
   std::vector<std::string> path;
+
+  // Initialize a map to store the distance from start to each node
+  std::unordered_map<std::string, double> distance;
+
+  // Initialize distances to infinity
+  for (auto node : data) {
+    distance[node.first] = INT_MAX;
+  }
+
+  // Initialize a map to store the previous node of each node
+  std::unordered_map<std::string, std::string> previous;
+
+  // Initialize a map to store the visited nodes
+  std::unordered_map<std::string, bool> visited;
+
+  // Initialize all visited noted to false
+  for (auto node : data) {
+    visited[node.first] = false;
+  }
+
+  // // Get the id of the start and goal locations
+  // location1_name = FindClosestName(location1_name);
+  // location2_name = FindClosestName(location2_name);
+
+  // Get the id of the locations
+  std::string location1_id = GetID(location1_name);
+  std::string location2_id = GetID(location2_name);
+
+  // If the start and goal locations are the same, return an empty path
+  if (location1_id == location2_id) {
+    return path;
+  }
+
+  // Initialize the priority queue
+  std::priority_queue<std::pair<double, std::string>, 
+                      std::vector<std::pair<double, std::string>>, 
+                      std::greater<std::pair<double, std::string>>> pq;
+
+  // Push the start location to the priority queue
+  pq.push(std::make_pair(0, location1_id));
+
+  // Initialize the distance of the start location to 0
+  distance[location1_id] = 0;
+
+  while (!pq.empty()) {
+    // Get the node with the smallest distance
+    std::string current_id = pq.top().second;
+    pq.pop();
+    // If the current node is the goal location, break
+    if (current_id == location2_id) {
+      break;
+    }
+
+    // If the current node has been visited, continue
+    if (visited[current_id]) {
+      continue;
+    }
+
+    // Mark the current node as visited
+    visited[current_id] = true;
+
+    // Get the neighbors of the current node
+    std::vector<std::string> neighbors = GetNeighborIDs(current_id);
+
+    // For each neighbor
+    for (auto neighbor : neighbors) {
+      // Get the distance from the current node to the neighbor
+      double distance_to_neighbor = CalculateDistance(current_id, neighbor);
+
+      // If the distance is smaller than the current distance, update the distance
+      if (distance[current_id] + distance_to_neighbor < distance[neighbor]) {
+        distance[neighbor] = distance[current_id] + distance_to_neighbor;
+        previous[neighbor] = current_id;
+        pq.push(std::make_pair(distance[neighbor], neighbor));
+      }
+    }
+  }
+
+  // Create the path
+  std::string current_id = location2_id;
+  while (current_id != location1_id) {
+    path.push_back(current_id);
+    current_id = previous[current_id];
+  }
+  
   return path;
 }
 
