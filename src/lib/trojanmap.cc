@@ -311,7 +311,12 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     path.push_back(current_id);
     current_id = previous[current_id];
   }
+
+  // Add the start location to the path
+  path.push_back(location1_id);
   
+  // Reverse the path
+  std::reverse(path.begin(), path.end());
   return path;
 }
 
@@ -363,6 +368,21 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
  */
 std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(std::string locations_filename){
   std::vector<std::string> location_names_from_csv;
+  // Open the file
+  std::fstream locations_file;
+  locations_file.open(locations_filename, std::ios::in);
+  std::string line;
+
+  // Call getline to ignore the header
+  getline(locations_file, line);
+
+  // Read the rest of the lines
+  while (getline(locations_file, line)) {
+    std::stringstream ss(line);
+    std::string location_name;
+    std::getline(ss, location_name);
+    location_names_from_csv.push_back(location_name);
+  }
   return location_names_from_csv;
 }
 
@@ -375,6 +395,25 @@ std::vector<std::string> TrojanMap::ReadLocationsFromCSVFile(std::string locatio
  */
 std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(std::string dependencies_filename){
   std::vector<std::vector<std::string>> dependencies_from_csv;
+  // Open the file
+  std::fstream dependencies_file;
+  dependencies_file.open(dependencies_filename, std::ios::in);
+  std::string line;
+
+  // Call getline to ignore the header
+  getline(dependencies_file, line);
+
+  // Read the rest of the lines
+  while (getline(dependencies_file, line)) {
+    std::stringstream ss(line);
+    std::string dependency_from;
+    std::string dependency_to;
+    std::getline(ss, dependency_from, ',');
+    std::getline(ss, dependency_to);
+    std::vector<std::string> dependency = {dependency_from, dependency_to};
+    dependencies_from_csv.push_back(dependency);
+  }
+
   return dependencies_from_csv;
 }
 
