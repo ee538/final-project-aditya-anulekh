@@ -355,7 +355,6 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
   // Initialize the distance of the start location to 0
   distance[location1_id] = 0;
   int iterations = data.size()-1;
-  std::cout << "iterations: " << iterations << std::endl;
   std::string current_id = location1_id;
 
   bool STOP = true;
@@ -491,7 +490,50 @@ std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(std
 std::vector<std::string> TrojanMap::DeliveringTrojan(std::vector<std::string> &locations,
                                                      std::vector<std::vector<std::string>> &dependencies){
   std::vector<std::string> result;
+
+  // Map to store the visited nodes
+  std::unordered_map<std::string, bool> visited;
+
+  // Map to store the dependencies
+  std::unordered_map<std::string, std::vector<std::string>> dependency_map;
+
+  // Initialize visited map
+  for (auto location : locations) {
+    visited[location] = false;
+  }
+
+  // Create edge map
+  for (auto &dependency : dependencies) {
+    dependency_map[dependency[0]].push_back(dependency[1]);
+  }
+
+  // Call topological sort helper function on unvisited nodes
+  for (auto location : locations) {
+    if (!visited[location]) {
+      TopologicalSort(location, dependency_map, visited, result);
+    }
+  }
+  // Reverse the result
+  std::reverse(result.begin(), result.end());
   return result;                                                     
+}
+
+// Helper function for topological sort
+void TrojanMap::TopologicalSort(std::string &location,
+                                std::unordered_map<std::string, std::vector<std::string>> &dependency_map,
+                                std::unordered_map<std::string, bool> &visited,
+                                std::vector<std::string> &result) {
+  // Iterate through all the dependencies
+  for (auto &dependency : dependency_map[location]) {
+    // If the dependency is not visited, call topological sort on it
+    if (!visited[dependency]) {
+      // Mark the dependency as visited
+      visited[dependency] = true;
+      TopologicalSort(dependency, dependency_map, visited, result);
+    }
+  }
+  // Add the location to the result
+  result.push_back(location);
 }
 
 /**
@@ -502,6 +544,10 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(std::vector<std::string> &l
  * @return {bool}                      : in square or not
  */
 bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
+  Node n = data[id];
+  if (n.lat > square[0] && n.lat < square[1] && n.lon > square[2] && n.lon < square[3]) {
+    return true;
+  }
   return false;
 }
 
@@ -514,6 +560,13 @@ bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
 std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
   // include all the nodes in subgraph
   std::vector<std::string> subgraph;
+  // Iterate through all the nodes
+  for (auto &n: data) {
+    // Check if the node is in the square
+    if (inSquare(n.first, square)) {
+      subgraph.push_back(n.first);
+    }
+  }
   return subgraph;
 }
 
@@ -526,6 +579,8 @@ std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
  * @return {bool}: whether there is a cycle or not
  */
 bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<double> &square) {
+  // Get the subgraph
+  std::vector<std::string> subgraph_in_square = GetSubgraph(square);
   return false;
 }
 

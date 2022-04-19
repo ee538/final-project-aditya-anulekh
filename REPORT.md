@@ -1,3 +1,7 @@
+# Group Members
+Aditya Anulekh Mantri - adityaan@usc.edu - 8049574464
+Aditi Bodhankar - bodhanka@usc.edu - 9323549368
+
 # Phase 1
 
 ## Autocomplete

@@ -96,6 +96,12 @@ class TrojanMap {
   std::vector<std::string> DeliveringTrojan(std::vector<std::string> &location_names,
                                             std::vector<std::vector<std::string>> &dependencies);
 
+  // Help function for topological sort
+  void TopologicalSort(std::string &location,
+                       std::unordered_map<std::string, std::vector<std::string>> &dependency_map,
+                       std::unordered_map<std::string, bool> &visited,
+                       std::vector<std::string> &result);                                            
+
   // Given a vector of location ids, it should reorder them such that the path
   // that covers all these points has the minimum length.
   // The return value is a pair where the first member is the total_path,

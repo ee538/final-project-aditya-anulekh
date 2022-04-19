@@ -156,6 +156,7 @@ TEST(TrojanMapStudentTest, CalculateEditDistance_Test1) {
   EXPECT_EQ(m.CalculateEditDistance("USC Credit Union", "Olive & Pico"), 13);
   EXPECT_EQ(m.CalculateEditDistance("Venice & Broadway", "Venice & Broadway"), 0);
   EXPECT_EQ(m.CalculateEditDistance("#@%&*", "  y"), 5);
+  EXPECT_EQ(m.CalculateEditDistance("Roplhs", "Martin Luther King Junior & Broadway 1"), 37);
 }
 
 // Test FindClosestName function
@@ -173,4 +174,24 @@ TEST(TrojanMapStudentTest, FindClosestName_Test1) {
   EXPECT_EQ(m.FindClosestName("MacDonals"), "McDonalds");
   EXPECT_EQ(m.FindClosestName("Bava"), "CAVA");
   EXPECT_EQ(m.FindClosestName("Moneybird"), "Honeybird");
+}
+
+TEST(TrojanMapStudentTest, ReadFromCSV) {
+  TrojanMap m;
+  std::vector <std::string> res = {"Ralphs", "KFC", "Chick-fil-A"};
+  std::vector <std::vector<std::string>> dependencies = {{"Ralphs", "Chick-fil-A"}, {"Ralphs", "KFC"}, {"Chick-fil-A", "KFC"}};
+  std::vector <std::vector<std::string>> dependencies1 = {};
+  EXPECT_EQ(m.ReadLocationsFromCSVFile("/home/aditya/Documents/ee538/final-project-aditya-anulekh/input/topologicalsort_locations.csv"), res);
+  EXPECT_EQ(m.ReadDependenciesFromCSVFile("/home/aditya/Documents/ee538/final-project-aditya-anulekh/input/topologicalsort_dependencies.csv"), dependencies);
+  EXPECT_EQ(m.ReadDependenciesFromCSVFile("/home/aditya/Documents/ee538/final-project-aditya-anulekh/input/topologicalsort_dependencies_1.csv"), dependencies1);
+}
+
+TEST(TrojanMapStudentTest, TopologicalSort) {
+  TrojanMap m;
+  std::vector <std::string> res = { "Ralphs", "Chick-fil-A", "KFC" };
+  std::vector <std::string> locations = {"Ralphs", "KFC", "Chick-fil-A"};
+  std::vector <std::vector<std::string>> dependencies = {{"Ralphs", "Chick-fil-A"}, {"Ralphs", "KFC"}, {"Chick-fil-A", "KFC"}};
+  std::vector <std::vector<std::string>> dependencies1 = {};
+  EXPECT_EQ(m.DeliveringTrojan(locations, dependencies), res);
+  // EXPECT_EQ(m.DeliveringTrojan(locations, dependencies1), res);
 }
