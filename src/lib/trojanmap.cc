@@ -331,6 +331,69 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
 std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
     std::string location1_name, std::string location2_name){
   std::vector<std::string> path;
+  
+  // Initialize a map to store the distance from start to each node
+  std::unordered_map<std::string, double> distance;
+
+  // Initialize a map to store the previous node of each node 
+  std::unordered_map<std::string, std::string> previous;
+
+  // Initialize distances to infinity
+  for (auto node : data) {
+    distance[node.first] = INT_MAX;
+  }
+
+  // Get the id of the locations
+  std::string location1_id = GetID(location1_name);
+  std::string location2_id = GetID(location2_name);
+
+  // If the start and goal locations are the same, return an empty path
+  if (location1_id == location2_id) {
+    return path;
+  }
+
+  // Initialize the distance of the start location to 0
+  distance[location1_id] = 0;
+  int iterations = data.size()-1;
+  std::cout << "iterations: " << iterations << std::endl;
+  std::string current_id = location1_id;
+
+  bool STOP = true;
+
+  // Traverse all edges
+  for (int i = 0; i < iterations; i++) {
+    STOP = true;
+    for (auto node: data) {
+      // Get neighbors of the current node
+      std::vector<std::string> neighbors = GetNeighborIDs(node.first);
+      for (auto neighbor: neighbors) {
+        // Get the distance from the current node to the neighbor
+        double distance_to_neighbor = CalculateDistance(node.first, neighbor);
+        // If the distance is smaller than the current distance, update the distance
+        if (distance[node.first] + distance_to_neighbor < distance[neighbor]) {
+          distance[neighbor] = distance[node.first] + distance_to_neighbor;
+          previous[neighbor] = node.first;
+          STOP = false;
+        }
+      }
+    }
+    if (STOP) {
+      break;
+    }
+  }
+  
+  // Create the path
+  current_id = location2_id;
+  while (current_id != location1_id) {
+    path.push_back(current_id);
+    current_id = previous[current_id];
+    }
+
+  // Add the start location to the path
+  path.push_back(location1_id);
+  
+  // Reverse the path
+  std::reverse(path.begin(), path.end());
   return path;
 }
 
