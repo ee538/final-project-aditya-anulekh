@@ -355,13 +355,10 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
   // Initialize the distance of the start location to 0
   distance[location1_id] = 0;
   int iterations = data.size()-1;
-  std::string current_id = location1_id;
-
-  bool STOP = true;
 
   // Traverse all edges
   for (int i = 0; i < iterations; i++) {
-    STOP = true;
+    bool STOP = true;
     for (auto node: data) {
       // Get neighbors of the current node
       std::vector<std::string> neighbors = GetNeighborIDs(node.first);
@@ -382,7 +379,7 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
   }
   
   // Create the path
-  current_id = location2_id;
+  std::string current_id = location2_id;
   while (current_id != location1_id) {
     path.push_back(current_id);
     current_id = previous[current_id];

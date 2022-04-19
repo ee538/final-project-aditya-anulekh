@@ -195,3 +195,145 @@ TEST(TrojanMapStudentTest, TopologicalSort) {
   EXPECT_EQ(m.DeliveringTrojan(locations, dependencies), res);
   // EXPECT_EQ(m.DeliveringTrojan(locations, dependencies1), res);
 }
+
+TEST(TrojanMapStudentTest, CalculateShortestPath_Dijkstra){
+  TrojanMap m;
+  // TEST1
+  // Test from Ralphs to Target
+  auto path1 = m.CalculateShortestPath_Dijkstra("Ralphs", "Target");
+  std::vector<std::string> gt1{
+      "2578244375","4380040154","4380040158","4380040167","6805802087","8410938469",
+      "6813416131","7645318201","6813416130","6813416129","123318563","452688940",
+      "6816193777","123408705","6816193774","452688933","452688931","123230412",
+      "6816193770","6787470576","4015442011","6816193692","6816193693","6816193694",
+      "4015377691","544693739","6816193696","6804883323","6807937309","6807937306",
+      "6816193698","4015377690","4015377689","122814447","6813416159","6813405266",
+      "4015372488","4015372487","6813405229","122719216","6813405232","4015372486",
+      "7071032399","4015372485","6813379479","6813379584","6814769289","5237417650"}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path1) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt1) << "miles" << std::endl;
+  EXPECT_EQ(path1, gt1);
+  
+  // Reverse the input from Ralphs to Chick-fil-A
+  path1 = m.CalculateShortestPath_Dijkstra("Target", "Ralphs");
+  std::reverse(gt1.begin(),gt1.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path1) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt1) << "miles" << std::endl;
+  EXPECT_EQ(path1, gt1);
+
+  // TEST2
+  // Test from Chick-fil-A to CVS Pharmacy
+  auto path2 = m.CalculateShortestPath_Dijkstra("Chick-fil-A", "CVS Pharmacy");
+  std::vector<std::string> gt2{
+      "4547476733","6820935910","6814916515","6814916516","1837212101","1837212103",
+      "6813411589","216155217","6813411590","1472141024","6813405280","348121864",
+      "348121996","6813405275","1732243544","6819179749","4015372463","4015372469",
+      "1732243620","6814916523","6814916522","6813379547","6813379546","6813379536",
+      "6813379545","6813379544","6813379495","6813379494","3398574883","6813565327",
+      "3402810298","6813565328","3088548446"}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path2) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt2) << "miles" << std::endl;
+  EXPECT_EQ(path2, gt2);
+  
+  // Reverse the input from CVS Pharmacy to Chick-fil-A
+  path2 = m.CalculateShortestPath_Dijkstra("CVS Pharmacy", "Chick-fil-A");
+  std::reverse(gt2.begin(),gt2.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path2) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt2) << "miles" << std::endl;
+  EXPECT_EQ(path2, gt2);
+
+  // TEST3
+  // Test from Startbucks to Starbucks
+  auto path3 = m.CalculateShortestPath_Dijkstra("Starbucks", "Starbucks");
+  std::vector<std::string> gt3{}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path3) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt3) << "miles" << std::endl;
+  EXPECT_EQ(path3, gt3);
+  
+  // Reverse the input from Startbucks to Starbucks
+  path3 = m.CalculateShortestPath_Dijkstra("Starbucks", "Starbucks");
+  std::reverse(gt3.begin(),gt3.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path3) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt3) << "miles" << std::endl;
+  EXPECT_EQ(path3, gt3);
+}
+
+TEST(TrojanMapStudentTest, CalculateShortestPath_Bellman_Ford){
+  TrojanMap m;
+  // TEST1
+  // Test from Ralphs to Target
+  auto path1 = m.CalculateShortestPath_Bellman_Ford("Ralphs", "Target");
+  std::vector<std::string> gt1{
+      "2578244375","4380040154","4380040158","4380040167","6805802087","8410938469",
+      "6813416131","7645318201","6813416130","6813416129","123318563","452688940",
+      "6816193777","123408705","6816193774","452688933","452688931","123230412",
+      "6816193770","6787470576","4015442011","6816193692","6816193693","6816193694",
+      "4015377691","544693739","6816193696","6804883323","6807937309","6807937306",
+      "6816193698","4015377690","4015377689","122814447","6813416159","6813405266",
+      "4015372488","4015372487","6813405229","122719216","6813405232","4015372486",
+      "7071032399","4015372485","6813379479","6813379584","6814769289","5237417650"}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path1) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt1) << "miles" << std::endl;
+  EXPECT_EQ(path1, gt1);
+  
+  // Reverse the input from Ralphs to Chick-fil-A
+  path1 = m.CalculateShortestPath_Bellman_Ford("Target", "Ralphs");
+  std::reverse(gt1.begin(),gt1.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path1) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt1) << "miles" << std::endl;
+  EXPECT_EQ(path1, gt1);
+
+  // TEST2
+  // Test from Chick-fil-A to CVS Pharmacy
+  auto path2 = m.CalculateShortestPath_Bellman_Ford("Chick-fil-A", "CVS Pharmacy");
+  std::vector<std::string> gt2{
+      "4547476733","6820935910","6814916515","6814916516","1837212101","1837212103",
+      "6813411589","216155217","6813411590","1472141024","6813405280","348121864",
+      "348121996","6813405275","1732243544","6819179749","4015372463","4015372469",
+      "1732243620","6814916523","6814916522","6813379547","6813379546","6813379536",
+      "6813379545","6813379544","6813379495","6813379494","3398574883","6813565327",
+      "3402810298","6813565328","3088548446"}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path2) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt2) << "miles" << std::endl;
+  EXPECT_EQ(path2, gt2);
+  
+  // Reverse the input from CVS Pharmacy to Chick-fil-A
+  path2 = m.CalculateShortestPath_Bellman_Ford("CVS Pharmacy", "Chick-fil-A");
+  std::reverse(gt2.begin(),gt2.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path2) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt2) << "miles" << std::endl;
+  EXPECT_EQ(path2, gt2);
+
+  // TEST3
+  // Test from Startbucks to Starbucks
+  auto path3 = m.CalculateShortestPath_Bellman_Ford("Starbucks", "Starbucks");
+  std::vector<std::string> gt3{}; // Expected path
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path3) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt3) << "miles" << std::endl;
+  EXPECT_EQ(path3, gt3);
+  
+  // Reverse the input from Startbucks to Starbucks
+  path3 = m.CalculateShortestPath_Bellman_Ford("Starbucks", "Starbucks");
+  std::reverse(gt3.begin(),gt3.end()); // Reverse the path
+
+  // Print the path lengths
+  std::cout << "My path length: "  << m.CalculatePathLength(path3) << "miles" << std::endl;
+  std::cout << "GT path length: " << m.CalculatePathLength(gt3) << "miles" << std::endl;
+  EXPECT_EQ(path3, gt3);
+}
