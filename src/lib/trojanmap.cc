@@ -542,7 +542,7 @@ void TrojanMap::TopologicalSort(std::string &location,
  */
 bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
   Node n = data[id];
-  if (n.lat > square[0] && n.lat < square[1] && n.lon > square[2] && n.lon < square[3]) {
+  if (n.lon > square[0] && n.lon < square[1] && n.lat < square[2] && n.lat > square[3]) {
     return true;
   }
   return false;
@@ -575,9 +575,61 @@ std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
  * @param {std::vector<double>} square: four vertexes of the square area
  * @return {bool}: whether there is a cycle or not
  */
+
+bool TrojanMap::CycleDetectionHelper(std::string &current_point,
+                                      std::unordered_map<std::string, bool> &visited, 
+                                      std::string &parent,
+                                      std::vector<double> &square){
+
+  // Visit node only if it is in the square
+  if (inSquare(current_point, square)) {
+    // Mark the current node as visited
+    visited[current_point] = true;
+
+
+    // Find all the vertices which are not visited and are adjacent to the current node
+    std::vector<std::string> neighbors = GetNeighborIDs(current_point);
+    for (auto neighbor: neighbors){
+      // If the neighbor is not visited, call the helper function recursively
+      if (!visited[neighbor] && inSquare(neighbor, square)) {
+        if (CycleDetectionHelper(neighbor, visited, current_point, square)){
+          return true;
+        }
+      }
+      // If neighbor is visited and is not parent of the current node, there is a cycle
+      else if (visited[neighbor] && neighbor != parent){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<double> &square) {
-  // Get the subgraph
-  std::vector<std::string> subgraph_in_square = GetSubgraph(square);
+  // Create a map to store the visited nodes
+  std::unordered_map<std::string, bool> visited;
+
+  std::cout << "subgraph size: " << subgraph.size() << std::endl;
+
+  // Initialize visited map
+  for (auto points : subgraph) {
+    visited[points] = false;
+  }
+
+  // Call the recursive helper
+  // function to detect cycle
+
+  std::string parent = "NULL";
+
+  for (auto points : subgraph) {
+    // Don't recur for points if
+    // it is already visited
+    if (!visited[points]) {
+      if (CycleDetectionHelper(points, visited, parent, square)) {
+        return true;
+      }
+    }
+  }
   return false;
 }
 
