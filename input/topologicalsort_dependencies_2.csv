@@ -1,0 +1,10 @@
+Source, Destination
+Ralphs,Target
+Ralphs,Chick-fil-A
+Ralphs,Starbucks
+Target,KFC
+Target,Chick-fil-A
+Starbucks,Chick-fil-A
+Chick-fil-A,KFC
+KFC,CAVA
+KFC,Chipotle

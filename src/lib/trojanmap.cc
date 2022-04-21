@@ -7,6 +7,37 @@ void convert_string_to_lower(std::string &str) {
   }
 }
 
+// Util function to check if a graph is DAG or not
+bool is_dag_util(std::string &location, std::vector<std::string> &visited, std::vector<std::string> &stack, std::unordered_map<std::string, std::vector<std::string>> &dependencies) {
+  visited.push_back(location);
+  stack.push_back(location);
+  for (auto &dependency : dependencies[location]) {
+    if (std::find(visited.begin(), visited.end(), dependency) == visited.end()) {
+      if (!is_dag_util(dependency, visited, stack, dependencies)) {
+        return false;
+      }
+    } else if (std::find(stack.begin(), stack.end(), dependency) != stack.end()) {
+      return false;
+    }
+  }
+  stack.pop_back();
+  return true;
+}
+
+// Function to check if a graph is DAG or not
+bool is_dag(std::vector<std::string> &locations, std::unordered_map<std::string, std::vector<std::string>> &dependencies) {
+  std::vector<std::string> visited;
+  std::vector<std::string> stack;
+  for (auto &location : locations) {
+    if (std::find(visited.begin(), visited.end(), location) == visited.end()) {
+      if (!is_dag_util(location, visited, stack, dependencies)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 //-----------------------------------------------------
 // TODO: Student should implement the following:
 //-----------------------------------------------------
@@ -504,6 +535,11 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(std::vector<std::string> &l
     dependency_map[dependency[0]].push_back(dependency[1]);
   }
 
+  // Check if graph is DAG or not
+  if (!is_dag(locations, dependency_map)) {
+    return result;
+  }
+
   // Call topological sort helper function on unvisited nodes
   for (auto location : locations) {
     if (!visited[location]) {
@@ -520,12 +556,14 @@ void TrojanMap::TopologicalSort(std::string &location,
                                 std::unordered_map<std::string, std::vector<std::string>> &dependency_map,
                                 std::unordered_map<std::string, bool> &visited,
                                 std::vector<std::string> &result) {
+
+    // Mark the dependency as visited
+    visited[location] = true;
+
   // Iterate through all the dependencies
   for (auto &dependency : dependency_map[location]) {
     // If the dependency is not visited, call topological sort on it
     if (!visited[dependency]) {
-      // Mark the dependency as visited
-      visited[dependency] = true;
       TopologicalSort(dependency, dependency_map, visited, result);
     }
   }
