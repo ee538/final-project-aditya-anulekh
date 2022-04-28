@@ -127,6 +127,8 @@ class TrojanMap {
                                double &min_distance, std::pair<double, std::vector<std::vector<std::string>>> &records,
                                std::vector<std::string> &optimal_path);
 
+  std::vector<std::string> TwoSwap(const std::vector<std::string> &vec, int i, int k);
+  
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_2opt(
       std::vector<std::string> location_ids);
 

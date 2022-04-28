@@ -596,10 +596,64 @@ void TrojanMap::Backtracking(std::string start, std::unordered_map<std::string, 
   }
 }
 
+// Function to reverse a path 'vec' between nodes 'i' and 'j'
+std::vector<std::string> TrojanMap::TwoSwap(const std::vector<std::string> &vec, int i, int k) {
+  std::vector<std::string> swap(vec);
+  std::reverse(swap.begin() + i, swap.begin() + k + 1);
+  return swap;
+}
 
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_2opt(
       std::vector<std::string> location_ids){
   std::pair<double, std::vector<std::vector<std::string>>> records;
+
+  // Initialize a vector to store the existing path
+  std::vector<std::string> existing_path = location_ids;
+  existing_path.push_back(location_ids[0]);
+
+  // Initialize a vector to store the new path
+  std::vector<std::string> new_path;
+
+  // Create a best distance variable
+  double best_dist = INT_MAX;
+
+  // Get the number of locations
+  int num_locations = location_ids.size();
+
+  // Define a flag
+  bool is_optimal = false;
+
+  // Repeat until no improvement is made
+  while (!is_optimal){
+    start_again:
+
+    // set the flag to true
+    is_optimal = true;
+    best_dist = CalculatePathLength(existing_path);
+
+    // swap a particular subset of the existing path
+    for (int i=1; i <= num_locations-2; i++){
+      for (int j=i+1; j <= num_locations-1; j++){
+
+        // Swap the existing path
+        new_path = TwoSwap(existing_path, i, j);
+        double new_dist = CalculatePathLength(new_path);
+
+        // update the best distance
+        if (new_dist < best_dist){
+          is_optimal = false;
+          best_dist = new_dist;
+          existing_path = new_path;
+
+          // add all paths to the records
+          records.first = best_dist;
+          records.second.push_back(existing_path);
+
+          goto start_again;
+        }
+      }
+    }
+  }
   return records;
 }
 
