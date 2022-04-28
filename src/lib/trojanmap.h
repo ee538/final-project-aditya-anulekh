@@ -113,7 +113,13 @@ class TrojanMap {
   
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_Backtracking(
       std::vector<std::string> location_ids);
-  
+
+  void Backtracking(std::string start, std::unordered_map<std::string, double> distance,
+                               std::vector<std::string> location_ids,
+                               std::string curr_node, double curr_distance,
+                               std::vector<std::string> &curr_path,
+                               double &min_distance, std::pair<double, std::vector<std::vector<std::string>>> &records);
+
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_2opt(
       std::vector<std::string> location_ids);
 

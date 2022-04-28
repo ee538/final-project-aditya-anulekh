@@ -440,8 +440,72 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_Backtracking(
                                     std::vector<std::string> location_ids) {
   std::pair<double, std::vector<std::vector<std::string>>> records;
+  
+  // Initialize minimum distance
+  double min_distance = INT_MAX;
+
+  // Initialize a vector to store the path
+  std::vector<std::string> curr_path;
+
+  // Initialize a map to store the distance from start to each node
+  std::unordered_map<std::string, double> distance;
+
+  // Initialize the distance of the start location to 0
+  distance[location_ids[0]] = 0;
+
+  // Initialize the map with the distance from start to each node
+  for (auto &id: location_ids) {
+    distance[id] = CalculateDistance(location_ids[0], id);
+  }
+
+  // Initialize current distance to 0
+  double curr_distance = 0;
+
+  // Call the backtracking function
+  Backtracking(location_ids[0], distance, location_ids, location_ids[0], curr_distance, curr_path, min_distance, records);
+
+  // Update the minimum distance
+  records.first = min_distance;
+
   return records;
 }
+
+// Backtracking function
+void TrojanMap::Backtracking(std::string start, std::unordered_map<std::string, double> distance,
+                             std::vector<std::string> location_ids,
+                             std::string curr_node, double curr_distance,
+                             std::vector<std::string> &curr_path,
+                             double &min_distance,  std::pair<double, std::vector<std::vector<std::string>>> &records) {
+  // If the current node is the last node, update the minimum distance
+  if (curr_path.size() == distance.size()) {
+    if (curr_distance < min_distance) {
+      min_distance = curr_distance;
+    }
+    records.second.push_back(curr_path);
+    return;
+  }
+  // If the current distance is larger than the minimum distance, return
+  if (curr_distance >= min_distance) {
+    std::cout << "Backtracked!" << std::endl;
+    return;
+  }
+
+  // Else evaluate all the children of the current node
+  for (int i = 0; i < location_ids.size(); i++) {
+    if (std::find(curr_path.begin(), curr_path.end(), location_ids[i]) == curr_path.end()) {
+      // Add the current node to the path
+      curr_path.push_back(location_ids[i]);
+
+      // Call backtracking recursively
+      Backtracking(start, distance, location_ids, location_ids[i], 
+                   curr_distance + CalculateDistance(curr_node, location_ids[i]),
+                   curr_path, min_distance, records);
+      // Remove the current node from the path
+      curr_path.pop_back();
+    }
+  }
+}
+
 
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_2opt(
       std::vector<std::string> location_ids){
@@ -683,6 +747,42 @@ bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<d
  */
 std::vector<std::string> TrojanMap::FindNearby(std::string attributesName, std::string name, double r, int k) {
   std::vector<std::string> res;
+
+  // Create a priority queue to store the distance from the source to the node (min heap)
+  std::priority_queue<std::pair<double, std::string>, 
+                      std::vector<std::pair<double, std::string>>, 
+                      std::greater<std::pair<double, std::string>>> pq;
+
+  // Get the ID of the source
+  std::string source = GetID(name);
+
+  // Iterate through all the data points
+  for (auto &n: data) {
+    // Skip the source
+    if (n.first == source) {
+      continue;
+    }
+    // If attributeName exists in the attributes of the node, add it to the priority queue
+    if (std::find(n.second.attributes.begin(), n.second.attributes.end(), attributesName) != n.second.attributes.end()) {
+      // Calculate the distance from the source to the data and push it to the priority queue
+      pq.push(std::make_pair(CalculateDistance(source, n.first), n.first));
+    }
+  }
+
+  // Pop the top k elements from the priority queue
+  for (int i = 0; i < k; i++) {
+    // If the priority queue is empty, return an empty vector
+    if (pq.empty()) {
+      return res;
+    }
+    // Pop the top element from the priority queue
+    std::string id = pq.top().second;
+    pq.pop();
+    // If the distance is less than the radius, add the id to the result
+    if (CalculateDistance(source, id) <= r) {
+      res.push_back(id);
+    }
+  }
   return res;
 }
 
