@@ -110,7 +110,13 @@ class TrojanMap {
   // path.)
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_Brute_force(
       std::vector<std::string> location_ids);
-  
+  void TravellingTrojan_Brute_force_helper(std::string start, std::unordered_map<std::string, double> distance,
+                                           std::vector<std::string> location_ids,
+                                           std::string curr_node, double curr_distance,
+                                           std::vector<std::string> &curr_path,
+                                           double &min_distance,  
+                                           std::pair<double, std::vector<std::vector<std::string>>> &records,
+                                           std::vector<std::string> &optimal_path);
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_Backtracking(
       std::vector<std::string> location_ids);
 
@@ -118,7 +124,8 @@ class TrojanMap {
                                std::vector<std::string> location_ids,
                                std::string curr_node, double curr_distance,
                                std::vector<std::string> &curr_path,
-                               double &min_distance, std::pair<double, std::vector<std::vector<std::string>>> &records);
+                               double &min_distance, std::pair<double, std::vector<std::vector<std::string>>> &records,
+                               std::vector<std::string> &optimal_path);
 
   std::pair<double, std::vector<std::vector<std::string>>> TravellingTrojan_2opt(
       std::vector<std::string> location_ids);
