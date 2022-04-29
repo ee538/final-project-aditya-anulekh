@@ -470,7 +470,7 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
   // Push back optimal path
   records.second.push_back(optimal_path);
 
-  std::cout << "records.second.size(): " << records.second.size() << std::endl;
+  // std::cout << "records.second.size(): " << records.second.size() << std::endl;
   return records;
 }
 
@@ -551,7 +551,7 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
   // Push the optimal path to the records
   records.second.push_back(optimal_path);
 
-  std::cout << "records.second.size(): " << records.second.size() << std::endl;
+  // std::cout << "records.second.size(): " << records.second.size() << std::endl;
 
   return records;
 }
@@ -611,11 +611,15 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
   std::vector<std::string> existing_path = location_ids;
   existing_path.push_back(location_ids[0]);
 
+  // Create a best distance variable
+  double best_dist = CalculatePathLength(existing_path);
+
+  records.second.push_back(existing_path);
+  records.first = best_dist;
+
   // Initialize a vector to store the new path
   std::vector<std::string> new_path;
 
-  // Create a best distance variable
-  double best_dist = INT_MAX;
 
   // Get the number of locations
   int num_locations = location_ids.size();
@@ -654,6 +658,7 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
       }
     }
   }
+  // std::cout << "records.second.size(): " << records.second.size() << std::endl;
   return records;
 }
 
@@ -908,8 +913,11 @@ std::vector<std::string> TrojanMap::FindNearby(std::string attributesName, std::
     }
     // If attributeName exists in the attributes of the node, add it to the priority queue
     if (std::find(n.second.attributes.begin(), n.second.attributes.end(), attributesName) != n.second.attributes.end()) {
-      // Calculate the distance from the source to the data and push it to the priority queue
-      pq.push(std::make_pair(CalculateDistance(source, n.first), n.first));
+      // Calculate the distance from the source to the data and push it to the priority queue if the distance is less than r
+      double distance = CalculateDistance(source, n.first);
+      if (distance <= r) {
+        pq.push(std::make_pair(distance, n.first));
+      }
     }
   }
 
@@ -922,10 +930,7 @@ std::vector<std::string> TrojanMap::FindNearby(std::string attributesName, std::
     // Pop the top element from the priority queue
     std::string id = pq.top().second;
     pq.pop();
-    // If the distance is less than the radius, add the id to the result
-    if (CalculateDistance(source, id) <= r) {
-      res.push_back(id);
-    }
+    res.push_back(id);
   }
   return res;
 }
