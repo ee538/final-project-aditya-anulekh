@@ -99,6 +99,17 @@ Time Complexity: O(E*N); where E: number of edges
 | :---: | :---: | :---: |
 |![](src/Images/Dijkstras_output.png) | ![](src/Images/BellamanFord_output.png) | ![](src/Images/ShortestPath_map.png) |
 
+Below is a comparison of the runtimes Dijkstra's, Bellman Ford with early stopping and Bellman Ford without early stopping
+
+| Source - Destination                 	| DIJKSTRA’S 	| BELLMAN FORD        (Early Stopping) 	| BELLMAN FORD (Without Early Stopping) 	|
+|:--------------------------------------:	|:------------:	|:--------------------------------------:	|:---------------------------------------:	|
+| Target - Trader Joe’s (0.03903 m)    	| 68 ms      	| 10789 ms                             	| 2008170 ms                            	|
+| Target - SSA (0.991239 m)            	| 114 ms     	| 10437 ms                             	| 2385274 ms                            	|
+| Target-Popeyes (0.74772m)            	| 99 ms      	| 10385 ms                             	| 1978956 ms                            	|
+| Target-7-Eleven1(0.779458m)          	| 101 ms     	| 10307 ms                             	| 2014801 ms                            	|
+| Target - Leavey Library (0.368658 m) 	| 88 ms      	| 10284 ms                             	| 4038911 ms                            	|
+| Target - Lucy's bakery (1.05532 m)   	| 120 ms     	| 10400 ms                             	| 2273291 ms                            	|
+
 ## Cycle Detection
 
 ### `inSquare`
