@@ -224,7 +224,7 @@ Below are short snippets from the above videos
 | ![](src/Images/brute_force.gif) 	| ![]( src/Images/output0_backtracking.gif ) 	| ![]( src/Images/output0_2opt.gif ) 	|
 |![](src/Images/brute-force_output.png) | ![](src/Images/backtracking_output.png) | ![](src/Images/2opt_output.png) |
 
-Below is a comparison of the distances from the three algorithms generated using Google Benchmark. The code to generate the following output is ![here](src/benchmark/TravellingTrojan_distance_benchmark.cc)
+Below is a comparison of the distances from the three algorithms generated using Google Benchmark. The code to generate the following output is [here](src/benchmark/TravellingTrojan_distance_benchmark.cc)
 
 | Number of Locations | 2-opt | Brute Force 	| Backtracking 	|
 |:-----:| :----------------:| :------------:|-------------	|
