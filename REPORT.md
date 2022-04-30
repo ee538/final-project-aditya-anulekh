@@ -222,7 +222,7 @@ Below are short snippets from the above videos
 
 Below is a comparison of the distances from the three algorithms
 
-| Number of Locations | distance_2opt | distance_bf 	| distance_bt 	|
+| Number of Locations | 2-opt | Brute Force 	| Backtracking 	|
 |:-----:| :----------------:| :------------:|-------------	|
 | 2  	| 2.29252       	| 2.29252     	| 2.29252     	|
 | 3  	| 2.53762       	| 2.53762     	| 2.53762     	|
