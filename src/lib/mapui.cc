@@ -359,7 +359,7 @@ void MapUI::PrintMenu() {
     menu = "Please input radius r:";
     std::cout << menu;
     getline(std::cin, input);
-    int r = std::stoi(input);
+    double r = std::stoi(input);
 
     menu = "Please input number k:";
     std::cout << menu;
