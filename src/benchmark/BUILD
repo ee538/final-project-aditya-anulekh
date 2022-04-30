@@ -10,6 +10,15 @@ cc_binary(
 )
 
 cc_binary(
+    name = "TravellingTrojan_distances",
+    srcs = ["TravellingTrojan_distance_benchmark.cc"],
+    deps = [
+        "@com_google_benchmark//:benchmark",
+        "//src/lib:TrojanMap",
+    ],
+)
+
+cc_binary(
     name = "AutoComplete_benchmark",
     srcs = ["AutoComplete_benchmark.cc"],
     deps = [
