@@ -226,12 +226,6 @@ RUNTIME COMPLEXITY: O(n^2)
 * We swap a subset of the existing path if the total distance of this path is smaller than the initial best path.
 * We then update the best path, the minimum distance and add it to records
 
-The output recordings of the above algorithms are uploaded to YouTube as unlisted videos here
-
-* [Brute Force](https://youtu.be/tIpWIYPjCeU)
-* [Backtracking](https://youtu.be/yzlvhs6gS2s)
-* [2-opt](https://youtu.be/voqzLJJNIjg)
-
 Below are short snippets from the above videos
 
 | Brute Force                        	| Backtracking                                  	| 2-opt                                 	|
@@ -298,6 +292,17 @@ As it can be seen in the above figure, 2-opt algorithm has a significantly lower
 * Using Dynamic Programming in algorithms reduces the call stack and improves the runtime of the program
 * Building an end-to-end C++ application
 
+# Presentation and Video Links
+
+* [Link to Presentation](https://docs.google.com/presentation/d/1RDwjfCuBQj1JHnCjStI-bwmPJfpWZXzTFTKSZTxOgOk/edit?usp=sharing)
+* [Link to YouTube Video](https://youtu.be/xsOKLaToUcI)
+
+The output videos of the Travelling Salesperson algorithms are uploaded to YouTube as unlisted videos here
+
+* [Brute Force](https://youtu.be/tIpWIYPjCeU)
+* [Backtracking](https://youtu.be/yzlvhs6gS2s)
+* [2-opt](https://youtu.be/voqzLJJNIjg)
+ 
 
 <p align="center">
   <img src="src/Images/TrojanMap.png" />
