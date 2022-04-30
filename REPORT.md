@@ -41,6 +41,8 @@
 ## Calculate Shortest Path
 ### Dijkstra's Algorithm: 
 
+RUNTIME COMPLEXITY: O(Elog(V)); where E: number of edges; V: number of vertices
+
 * Initialized a map `distance` to store the distance from start to each node
 * Initialized the distances to infinity
 * Initialized a map `previous`to store the previous node of each node
@@ -53,6 +55,8 @@
 
 ### Bellman Ford Algorithm:
 
+RUNTIME COMPLEXITY: O(E*V); where E: number of edges; V: number of vertices
+
 * Similar to the above algorithm, two maps for `distance` and `previous` are initialized 
 * The distances of all the nodes are initialized to be infinity
 * Then obtained the id of the source and the destination locations
@@ -61,6 +65,51 @@
 * An additional STOP sign is added into the algorithm to hault the program once the minimum distances do not vary with more number of edges.
 * All the closest neighbors are then added into the `previous` map
 * Since, this algorithm calculates the shortest path between any two nodes, it has a longer run time than Dijkstra's algorithm.
+
+
+## Travelling Salesman Problem
+
+Here we caluclate a round path starting and ending at the same location but passing through a set of all nodes with the minimum distance. To solve this problem we implement three algorithms - 
+    1. Brute-force
+    2. Backtracking
+    3. 2-OPT
+### `TravellingTrojan_Brute_force`
+
+RUNTIME COMPLEXITY: O(n!)
+
+* We first initialize the minimum distance - `min_distance` to infinity.
+* Then we initialize a vector of strings to store the current path.
+* We assume that the `start` node is the first location in the `locations` string given to us which consists of all the nodes need in the final path.
+* We initialize an unordered map to store the distance from the `start` node to each node. The distance of the `start` node is initialized to 0.
+* We calculate the distance from start to each node and store it in the above map.
+* We introduce a new variable called `curr_distance` and initialize it to 0.
+* Initialize the vector to store the optimal path
+* Call the brute-force helper function
+* update the minimum  distance and add the optimal path into the `records` output
+
+
+### `TravellingTrojan_Brute_force_helper`
+
+* If the current node is the last node, then we update the minimum distance
+* Else evaluate all the children of the current node, and add the current node to the path
+* We then call the helper function recursively on each child node
+
+### `TravellingTrojan_Backtracking`
+
+RUNTIME COMPLEXITY: O(n!)
+
+* The implementation is same as in the Brute-force case with only three additional lines of code which form the central element of the 'Backtracking' approach
+* After evaluating each path, we check if the current path is larger than the minimum distance and if yes, then we do not check for any path down that particular node and back track to the next child node and continue the similar logic
+
+### `TravellingTrojan_2opt`
+
+RUNTIME COMPLEXITY: O(n^2)
+
+* We start with initializing a vector to store the existing path
+* Then we initialize a vector to store the new path. We also create a best distance variable - `best_distance` and initialize it to infinity
+* We then initiliaze a flag to check if any improvement is made in finding the optimal path
+* We swap a subset of the existing path if the total distance of this path is smaller than the initial best path.
+* We then update the best path, the minimum distance and add it to records
 
 ## Delivering Trojan
 
@@ -79,11 +128,64 @@ The delivering trojan function is based on topological sort. Topological sort is
 
 ### `TopologicalSort`
 
+RUNTIME COMPLEXITY: O(E+V); where E: number of edges; V: number of vertices
+
 * This is a utility function that is called recursively from the `DeliveringTrojan` function
 * The function calls itself on all **unvisited** nodes
 * A node is added to the `result` vector when all the neighbors of the node are visited
 
 The final result vector is the reverse of the list formed by the helper function. This is the topological sort
 
+There are miscalleaneous functions - `ReadDependenciesFromCSVFile` and `ReadLocationsFromCSVFile` additionally used to read the locations and the dependencies files needed for topological sort
 
 ## Cycle Detection
+
+### `GetSubgraph`
+
+* Given four coordinates - the left and right longitides and the top and bottom latitudes, this function calculates if a node is present in the square created by the four points
+* It returns all nodes present in the square. These nodes form a subgraph which is later used to create a graph for cycle detection
+
+### `CycleDetectionHelper`
+
+* Visit the node only if it is in the subgraph obtained using the function - `GetSubgraph`. Then mark the node as visited. 
+* Find all the unvisited neighboring nodes of the current node.
+* If the node is unvisited, then we call this function on itself recursively. 
+* If we reach a node that is already visited, and if it is not connected to its parent, then we conclude that we have found a cycle.
+
+### `CycleDetection`
+
+RUNTIME COMPLEXITY: O(E+V); where E: number of edges; V: number of vertices
+
+* Check if there is a cycle within a square graph
+* Implementation: 
+    * Use a helper function - `CycleDetectionHelper` recursively
+    * DFS approach
+* Algorithm:
+    * We first create an unordered map - `visited` to store the visited nodes
+    * Then we initialize this `visited` map to `False`
+    * Then we call the recursive function introduced above on each child of the current node just like in the DFS algorithm. This  The recursion ends once we reach an already visited node node.
+
+## FindNearby
+
+RUNTIME COMPLEXITY: O(Nlog(N)); where N is the number of data points
+### `FindNearby`
+
+* Given a class name C, a location name L and a radius (number) r, this function finds the 'k' nearest locations in class C on the map near L with the range of r and return a vector of string ids.
+* Algorithm:
+    * We create a priority queue to store the distance from the source to the node (min heap)
+    * Then we get the locationid of the Location name 'L'
+    * We iterate through all the data points to check if the given `attributeName` exists in the attributes of the node. If yes, we add it to the priority queue. We also calculate the distance between location and the node and add it to the priority queue
+    * We then check for the top 'k' nearest nodes in the priority queue and pop them if they lie within the distance 'r'. And if the queue is empty, we return an empty string.
+
+
+## Future Work and Learnings:
+
+### Future Work:
+* 3-opt and Genetic algorithm for Travelling Salesperson Problem
+
+### Learnings:
+* Using a heap over a vector reduces time complexity in cases where sorting is important
+* Using Dynamic Programming in algorithms reduces the call stack and improves the runtime of the program
+* Building an end-to-end C++ application
+
+
