@@ -128,6 +128,10 @@ Time Complexity: O(E+N); where E: number of edges
     * Then we initialize this `visited` map to `False`
     * Then we call the recursive function introduced above on each child of the current node just like in the DFS algorithm. The recursion ends once we reach an already visited node.
 
+| Output | Map |
+| :---: | :---: |
+| ![](src/Images/cycle_detection_output.png) | ![](src/Images/cycle_detection_map.png) |
+
 ## Delivering Trojan
 
 Time Complexity: O(E+N); where E: number of edges
@@ -220,7 +224,7 @@ Below are short snippets from the above videos
 | ![](src/Images/brute_force.gif) 	| ![]( src/Images/output0_backtracking.gif ) 	| ![]( src/Images/output0_2opt.gif ) 	|
 |![](src/Images/brute-force_output.png) | ![](src/Images/backtracking_output.png) | ![](src/Images/2opt_output.png) |
 
-Below is a comparison of the distances from the three algorithms
+Below is a comparison of the distances from the three algorithms generated using Google Benchmark. The code to generate the following output is ![here](src/benchmark/TravellingTrojan_distance_benchmark.cc)
 
 | Number of Locations | 2-opt | Brute Force 	| Backtracking 	|
 |:-----:| :----------------:| :------------:|-------------	|
@@ -280,3 +284,6 @@ As it can be seen in the above figure, 2-opt algorithm has a significantly lower
 * Building an end-to-end C++ application
 
 
+<p align="center">
+  <img src="src/Images/TrojanMap.png" />
+</p>
