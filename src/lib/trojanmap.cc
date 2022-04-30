@@ -615,9 +615,9 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTr
       std::vector<std::string> location_ids){
   std::pair<double, std::vector<std::vector<std::string>>> records;
   // Input is 0 locations
-  // if (location_ids.size() == 0) {
-  //   return records;
-  // }
+  if (location_ids.size() == 0) {
+    return records;
+  }
 
   // Initialize a vector to store the existing path
   std::vector<std::string> existing_path = location_ids;
