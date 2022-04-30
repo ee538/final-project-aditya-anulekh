@@ -1,3 +1,9 @@
+# EE538 Spring 2022 Project - TrojanMap
+<p align="center">
+  <img src="src/Images/TrojanMap.png" />
+</p>
+
+
 # Group Members
 | Name                  	| Email            	| USC ID     	|
 |-----------------------	|------------------	|------------	|
@@ -302,8 +308,3 @@ The output videos of the Travelling Salesperson algorithms are uploaded to YouTu
 * [Brute Force](https://youtu.be/tIpWIYPjCeU)
 * [Backtracking](https://youtu.be/yzlvhs6gS2s)
 * [2-opt](https://youtu.be/voqzLJJNIjg)
- 
-
-<p align="center">
-  <img src="src/Images/TrojanMap.png" />
-</p>
