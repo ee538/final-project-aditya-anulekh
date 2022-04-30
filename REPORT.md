@@ -95,9 +95,13 @@ Time Complexity: O(E*N); where E: number of edges
 * All the closest neighbors are then added into the `previous` map
 * Since, this algorithm evaluates all the possible paths between any two nodes, it has a longer run time than Dijkstra's algorithm.
 
-| Dijkstra's | Bellman Ford | Output | Google Map |
-| :---: | :---: | :---: | :---: |
-|![](src/Images/Dijkstras_output.png) | ![](src/Images/BellamanFord_output.png) | ![](src/Images/ShortestPath_map.png) | ![](src/Images/google_map.png) |
+| Dijkstra's | Bellman Ford |
+| :---: | :---: |
+|![](src/Images/Dijkstras_output.png) | ![](src/Images/BellamanFord_output.png) |
+
+| Output | Google Map |
+| :---: | :---: |
+| ![](src/Images/ShortestPath_map.png) | ![](src/Images/google_map.png) |
 
 Below is a comparison of the runtimes Dijkstra's, Bellman Ford with early stopping and Bellman Ford without early stopping
 
