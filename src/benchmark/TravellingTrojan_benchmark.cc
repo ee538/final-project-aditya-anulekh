@@ -23,15 +23,6 @@ std::string GenerateRandomString(std::size_t n) {
   return result;
 }
 
-static void BM_AutoComplete(benchmark::State& state) {
-  std::string s = GenerateRandomString(state.range(0));
-  // Perform setup here
-  for (auto _ : state) {
-    // This code gets timed
-    trojanmap.Autocomplete(s);
-  }
-}
-
 static void BM_TravellingTrojan_Brute_force(benchmark::State& state) {
   std::vector<std::string> keys;
   for (auto x : trojanmap.data) {
@@ -80,13 +71,10 @@ static void BM_TravellingTrojan_2opt(benchmark::State& state) {
 
 // Register the function as a benchmark
 
-// Benchmark autocomplete function 
-// BENCHMARK(BM_AutoComplete)->RangeMultiplier(2)->Range(1 << 10, 1 << 20);
-
 // Benchmark travelling trojan brute force function
-BENCHMARK(BM_TravellingTrojan_Brute_force)->DenseRange(2, 10, 1);
-BENCHMARK(BM_TravellingTrojan_Backtracking)->DenseRange(2, 13, 1);
-BENCHMARK(BM_TravellingTrojan_2opt)->DenseRange(2, 16, 1);
+BENCHMARK(BM_TravellingTrojan_Brute_force)->DenseRange(2, 5, 1);
+BENCHMARK(BM_TravellingTrojan_Backtracking)->DenseRange(2, 5, 1);
+BENCHMARK(BM_TravellingTrojan_2opt)->DenseRange(2, 5, 1);
 
 
 // Run the benchmark

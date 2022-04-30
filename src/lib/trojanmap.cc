@@ -434,6 +434,10 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_Brute_force(
                                     std::vector<std::string> location_ids) {
   std::pair<double, std::vector<std::vector<std::string>>> records;
+  // Input is 0 locations
+  if (location_ids.size() == 0) {
+    return records;
+  }
   // Initialize minimum distance
   double min_distance = INT_MAX;
 
@@ -514,7 +518,11 @@ void TrojanMap::TravellingTrojan_Brute_force_helper(std::string start, std::unor
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_Backtracking(
                                     std::vector<std::string> location_ids) {
   std::pair<double, std::vector<std::vector<std::string>>> records;
-  
+  // Input is 0 locations
+  if (location_ids.size() == 0) {
+    return records;
+  }
+
   // Initialize minimum distance
   double min_distance = INT_MAX;
 
@@ -606,6 +614,10 @@ std::vector<std::string> TrojanMap::TwoSwap(const std::vector<std::string> &vec,
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravellingTrojan_2opt(
       std::vector<std::string> location_ids){
   std::pair<double, std::vector<std::vector<std::string>>> records;
+  // Input is 0 locations
+  // if (location_ids.size() == 0) {
+  //   return records;
+  // }
 
   // Initialize a vector to store the existing path
   std::vector<std::string> existing_path = location_ids;
@@ -930,6 +942,8 @@ std::vector<std::string> TrojanMap::FindNearby(std::string attributesName, std::
     // Pop the top element from the priority queue
     std::string id = pq.top().second;
     pq.pop();
+    std::cout << "id: " << id << std::endl;
+    std::cout << "CalculateDistance(source, n.first): " << CalculateDistance(source, id) << std::endl;
     res.push_back(id);
   }
   return res;

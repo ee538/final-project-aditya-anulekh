@@ -9,7 +9,7 @@ int main() {
     x.PlotMap();
     x.DynamicPrintMenu();
   #else
-    // x.PlotMap();
+    x.PlotMap();
     x.PrintMenu();
   #endif
   return 0;

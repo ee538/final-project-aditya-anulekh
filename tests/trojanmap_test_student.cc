@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "src/lib/trojanmap.h"
 
+using ::testing::UnorderedElementsAreArray;
 
 TEST(TrojanMapStudentTest, GetLatLon) {
   TrojanMap m;
@@ -176,6 +178,7 @@ TEST(TrojanMapStudentTest, FindClosestName_Test1) {
   EXPECT_EQ(m.FindClosestName("Moneybird"), "Honeybird");
 }
 
+// Test TopologicalSort function
 TEST(TrojanMapStudentTest, TopologicalSort) {
   TrojanMap m;
   std::vector <std::string> res = { "Ralphs", "Chick-fil-A", "KFC" };
@@ -186,6 +189,7 @@ TEST(TrojanMapStudentTest, TopologicalSort) {
   // EXPECT_EQ(m.DeliveringTrojan(locations, dependencies1), res);
 }
 
+// Test CalculateShortestPath_Dijkstra function
 TEST(TrojanMapStudentTest, CalculateShortestPath_Dijkstra){
   TrojanMap m;
   // TEST1
@@ -257,6 +261,7 @@ TEST(TrojanMapStudentTest, CalculateShortestPath_Dijkstra){
   EXPECT_EQ(path3, gt3);
 }
 
+// Test CalculateShortestPath_Bellman_Ford function
 TEST(TrojanMapStudentTest, CalculateShortestPath_Bellman_Ford){
   TrojanMap m;
   // TEST1
@@ -326,4 +331,158 @@ TEST(TrojanMapStudentTest, CalculateShortestPath_Bellman_Ford){
   std::cout << "My path length: "  << m.CalculatePathLength(path3) << "miles" << std::endl;
   std::cout << "GT path length: " << m.CalculatePathLength(gt3) << "miles" << std::endl;
   EXPECT_EQ(path3, gt3);
+}
+
+// Test CycleDetection function
+TEST(TrojanMapStudentTest, CycleDetection) {
+  TrojanMap m;
+  // Test case 1 - With cycle
+  std::vector<double> square1 = {-118.299, -118.290, 34.021, 34.011};
+  auto sub1 = m.GetSubgraph(square1);
+  bool result1 = m.CycleDetection(sub1, square1);
+  EXPECT_EQ(result1, true);
+
+  // Test case 2 - No cycle
+  std::vector<double> square2 = {-118.299, -118.298, 34.021, 34.020};
+  auto sub2 = m.GetSubgraph(square2);
+  bool result2 = m.CycleDetection(sub2, square2);
+  EXPECT_EQ(result2, false);
+
+  // Test case 3 - Empty Subgraph
+  std::vector<double> square3 = {-118.299, -118.299, 34.021, 34.021};
+  auto sub3 = m.GetSubgraph(square2);
+  bool result3 = m.CycleDetection(sub2, square2);
+  EXPECT_EQ(result3, false);
+
+}
+
+// Test TSP Brute Force function
+TEST(TrojanMapStudentTest, TSP_Brute_force) {
+  TrojanMap m;
+  
+  // Test case 1 - 4 locations
+  std::vector<std::string> input{"6805221419","8221360811","9591449435","7853031384"}; // Input location ids 
+  auto result = m.TravellingTrojan_Brute_force(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6805221419","8221360811","9591449435","7853031384","6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (gt == result.second[result.second.size()-1]) // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (gt == result.second[result.second.size()-1]) 
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
+
+  // Test case 2 - 0 locations
+  input = {}; // Input location ids 
+  result = m.TravellingTrojan_Brute_force(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second.size(), 0);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+  // Test case 3 - 1 locations
+  input = {"6805221419"}; // Input location ids 
+  result = m.TravellingTrojan_Brute_force(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {"6805221419", "6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second[result.second.size() - 1].size(), 2);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+}
+
+// Test TSP Backtracking function
+TEST(TrojanMapStudentTest, TSP_Backtracking) {
+  TrojanMap m;
+  
+  // Test case 1 - 4 locations
+  std::vector<std::string> input{"6805221419","8221360811","9591449435","7853031384"}; // Input location ids 
+  auto result = m.TravellingTrojan_Backtracking(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6805221419","8221360811","9591449435","7853031384","6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (gt == result.second[result.second.size()-1]) // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (gt == result.second[result.second.size()-1]) 
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
+
+  // Test case 2 - 0 locations
+  input = {}; // Input location ids 
+  result = m.TravellingTrojan_Backtracking(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second.size(), 0);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+  // Test case 3 - 1 locations
+  input = {"6805221419"}; // Input location ids 
+  result = m.TravellingTrojan_Backtracking(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {"6805221419", "6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second[result.second.size() - 1].size(), 2);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+}
+
+// Test TSP 2-opt function
+TEST(TrojanMapStudentTest, TSP_2opt) {
+  TrojanMap m;
+  
+  // Test case 1 - 4 locations
+  std::vector<std::string> input{"6805221419","8221360811","9591449435","7853031384"}; // Input location ids 
+  auto result = m.TravellingTrojan_2opt(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6805221419","8221360811","9591449435","7853031384","6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second[result.second.size() - 1].size(), input.size() + 1);
+
+  // Test case 2 - 0 locations
+  input = {}; // Input location ids 
+  result = m.TravellingTrojan_2opt(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second.size(), 0);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+  // Test case 3 - 1 locations
+  input = {"6805221419"}; // Input location ids 
+  result = m.TravellingTrojan_2opt(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  gt = {"6805221419", "6805221419"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  EXPECT_EQ(result.second[result.second.size() - 1].size(), 2);
+  EXPECT_EQ(m.CalculatePathLength(gt), 0);
+
+}
+
+// Test FindNearby function
+TEST(TrojanMapStudentTest, FindNearbyTest) {
+  TrojanMap m;
+  
+  // Standard input
+  std::string attribute = "supermarket"; std::string location = "Target"; double radius = 1; int k = 10;
+  auto result = m.FindNearby(attribute, location, radius, k);
+  std::vector<std::string> gt{"Trader Joes", "Cal Mart Beer & Wine Food Store", "Ralphs"};
+  for (auto &i : gt) {
+    i = m.GetID(i);
+  }
+  EXPECT_THAT(result, UnorderedElementsAreArray(gt));
+
+  // 0 radius, 0 locations
+  gt = {};
+  result = {};
+  result = m.FindNearby(attribute, location, 0, 0);
+  EXPECT_EQ(result.size(), 0);
+
 }
